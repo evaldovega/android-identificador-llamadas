@@ -136,12 +136,10 @@ public class Servicio extends CallScreeningService {
 
   private void notifyCall(int id,String bussines,String subject){
     Log.d("UFO:","Notify call");
-    /*Intent fullScreenIntent = new Intent(Intent.ACTION_MAIN);
+    Intent fullScreenIntent = new Intent(Intent.ACTION_MAIN);
     fullScreenIntent.setComponent(new ComponentName(getApplicationContext().getPackageName(), getApplicationContext().getPackageName()+".MainActivity"));
     PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-      fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);*/
-
-
+      fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
@@ -151,12 +149,11 @@ public class Servicio extends CallScreeningService {
       .setContentText("Te llamaré pronto.")
       .setVibrate(new long[]{0, 500, 1000})
       .setStyle(new NotificationCompat.BigTextStyle().bigText(subject).setBigContentTitle("mas información"))
-      .setOngoing(true)
+      .setOngoing(false)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setPriority(NotificationCompat.PRIORITY_MAX)
-      .setAutoCancel(true);
-
-      //.setFullScreenIntent(fullScreenPendingIntent, true);
+      .setAutoCancel(true)
+      .setFullScreenIntent(fullScreenPendingIntent, true);
 
     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
     notificationManager.notify(id, builder.build());
@@ -207,13 +204,13 @@ public class Servicio extends CallScreeningService {
             }
           }, 8000);
 
-          final Handler handler2 = new Handler();
+          /*final Handler handler2 = new Handler();
           handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
               clearNotification(getId(number));
             }
-          }, 60000);
+          }, 60000);*/
         }catch (Exception e){
           Log.e("UFO:",e.getMessage());
         }

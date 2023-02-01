@@ -55,7 +55,7 @@ public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJ
       NotificationChannel channel =  new NotificationChannel(channel_id, channel_id, NotificationManager.IMPORTANCE_HIGH);
       AudioAttributes audioAttributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
 
-      channel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+"://com.ufotectandroididentificadorllamadas/"+R.raw.truli), Notification.AUDIO_ATTRIBUTES_DEFAULT);
+      //channel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+"://com.ufotectandroididentificadorllamadas/"+R.raw.truli), Notification.AUDIO_ATTRIBUTES_DEFAULT);
       channel.setDescription("Envia  notificaciónes para notificar al usuario de llamadas entrantes");
 
       notificationManager.createNotificationChannel(channel);
@@ -139,11 +139,13 @@ public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJ
         intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING);
         getCurrentActivity().startActivityForResult(intent,1);
       }else{
-        promise.reject("Su dispositivo no soporta esta funcionalidad");
+        permiso.reject("Su dispositivo no soporta esta funcionalidad");
+        permiso=null;
       }
 
     }catch (Exception e){
       Log.e("UFO:CALL Screening",e.getMessage());
+      permiso.reject(e.getMessage());
       permiso=null;
     }
   }
@@ -151,11 +153,14 @@ public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJ
   @Override
   public void onActivityResult(Activity activity, int i, int i1, @Nullable Intent intent) {
     if(i==1){
+      Log.d("UFO:","onActivityResult");
       if(i1 == Activity.RESULT_OK){
         if(permiso!=null) {
+          Log.d("UFO:","concedido");
           permiso.resolve("ok");
         }
       }else{
+        Log.d("UFO:","no concedido");
         permiso.reject("E_REJECT_TO_ROLE_MANAGER");
       }
     }
