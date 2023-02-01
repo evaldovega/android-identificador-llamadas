@@ -29,7 +29,6 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepack": "bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
@@ -41,13 +40,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/android-identificador-llamadas",
-  "author": "evaldo vega <evega@ufotech.co> (https://github.com/)",
+  "repository": "https://github.com/evaldovega/android-identificador-llamadas",
+  "author": "evaldo vega <evaldo.vega@gmail.com> (https://github.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/android-identificador-llamadas/issues"
+    "url": "https://github.com/evaldovega/android-identificador-llamadas/issues"
   },
-  "homepage": "https://github.com/android-identificador-llamadas#readme",
+  "homepage": "https://github.com/evaldovega/android-identificador-llamadas#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -68,7 +67,7 @@
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "18.2.0",
-    "react-native": "0.71.1",
+    "react-native": "0.70.5",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "typescript": "^4.5.2"

@@ -9,6 +9,14 @@ buildscript {
   }
 }
 
+allprojects {
+  repositories {
+    mavenCentral()
+    google()
+    jcenter()
+  }
+}
+
 def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
@@ -49,6 +57,9 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+    buildFeatures {
+        viewBinding true
+    }
 
 }
 
@@ -62,7 +73,11 @@ dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native"
+  implementation "com.facebook.react:react-native:+"
+  implementation 'androidx.annotation:annotation:1.1.0'
+  implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 }
 
 if (isNewArchitectureEnabled()) {
@@ -72,3 +87,4 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.ufotectandroididentificadorllamadas"
   }
 }
+

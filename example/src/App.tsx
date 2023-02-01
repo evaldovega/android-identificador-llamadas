@@ -1,18 +1,52 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'ufotect-android-identificador-llamadas';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { getBackendUrl, getDefaultCallScreening, getMyNumber, init, setBackendUrl, setDefaultCallScreening, setMyNumber } from 'ufotect-android-identificador-llamadas';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+
+  const _setDefaultCallScreening=()=>{
+    setDefaultCallScreening().then((r:any)=>{
+      console.log("Permiso ",r)
+    }).catch((err:any)=>{
+      console.error(err);
+    })
+  }
+
+  const soyTuIdentificador=()=>{
+    getDefaultCallScreening().then((r:any)=>{
+      console.log({r})
+    }).catch((error:any)=>{
+      console.error(error)
+    })
+  }
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    init()
+    setBackendUrl('http://192.168.1.57:3000/validate')
+    getBackendUrl().then((url:String)=>{
+      console.log(url);
+    })
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <TouchableOpacity onPress={_setDefaultCallScreening} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
+        <Text style={{color:'white'}}>Establecer como APP de identificador de llamdas</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={soyTuIdentificador} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
+        <Text style={{color:'white'}}>Soy tú identificador de llamadas</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={()=>getMyNumber().then((n:String)=>console.log(n))} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
+        <Text style={{color:'white'}}>Mi número</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={()=>setMyNumber("3045587912").then((n:String)=>console.log(n))} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
+        <Text style={{color:'white'}}>Set mi número</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
