@@ -5,7 +5,7 @@ Identificador de llamadas
 ## Installation
 
 ```sh
-npm install ufotect-android-identificador-llamadas
+npm install ufotetch-android-identificador-llamadas
 ```
 
 ## Usage
