@@ -1,11 +1,11 @@
-# ufotect-android-identificador-llamadas
+# ufotech-android-identificador-llamadas
 
 Identificador de llamadas
 
 ## Installation
 
 ```sh
-npm install ufotetch-android-identificador-llamadas
+npm install ufotect-android-identificador-llamadas
 ```
 
 ## Usage
