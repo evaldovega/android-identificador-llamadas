@@ -149,7 +149,7 @@ public class Servicio extends CallScreeningService {
       .setContentText("Te llamaré pronto.")
       .setVibrate(new long[]{0, 500, 1000})
       .setStyle(new NotificationCompat.BigTextStyle().bigText(subject).setBigContentTitle("mas información"))
-      .setOngoing(false)
+      .setOngoing(true)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setPriority(NotificationCompat.PRIORITY_MAX)
       .setAutoCancel(true)
