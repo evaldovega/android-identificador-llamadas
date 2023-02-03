@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { getBackendUrl, getDefaultCallScreening, getMyNumber, init, setBackendUrl, setDefaultCallScreening, setMyNumber } from 'ufotect-android-identificador-llamadas';
+import { getBackendUrl, getDefaultCallScreening, getMyNumber, init, setBackendUrl, setDefaultCallScreening, setMyNumber, setPreference } from 'ufotect-android-identificador-llamadas';
 
 export default function App() {
 
@@ -23,7 +23,9 @@ export default function App() {
 
   React.useEffect(() => {
     init()
-    setBackendUrl('http://192.168.1.57:3000/validate')
+    //setBackendUrl('http://192.168.1.57:3000/validate')
+    setPreference('backend_call_valid','http://192.168.1.25:8000/entidades/historial-llamadas/informacion-llamada/')
+    setPreference('backend_call_store','http://192.168.1.25:8000/entidades/historial-llamadas/registro-llamada/')
     getBackendUrl().then((url:String)=>{
       console.log(url);
     })
@@ -43,7 +45,7 @@ export default function App() {
         <Text style={{color:'white'}}>Mi número</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={()=>setMyNumber("3045587912").then((n:String)=>console.log(n))} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
+      <TouchableOpacity onPress={()=>setMyNumber("3052402331").then((n:String)=>console.log(n))} style={{marginVertical:16,backgroundColor:'blue',padding:8,borderRadius:8}}>
         <Text style={{color:'white'}}>Set mi número</Text>
       </TouchableOpacity>
 

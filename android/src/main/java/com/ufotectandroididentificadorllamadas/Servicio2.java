@@ -57,7 +57,7 @@ public class Servicio2 extends BroadcastReceiver {
                     llamada.setEnd(new Date());
                 }else if(estado_anterior.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                     Log.d("UFO: ","Rechazo la llamada del agente");
-                    llamada.cerrarNotificacion();
+                    llamada.rechazar();
                 }
 
                 if(estado_anterior!=TelephonyManager.EXTRA_STATE_IDLE){

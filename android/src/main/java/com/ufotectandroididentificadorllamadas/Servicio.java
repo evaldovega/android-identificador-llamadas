@@ -49,18 +49,31 @@ public class Servicio extends CallScreeningService {
   static Llamada llamada;
   SharedPreferences preferences;
 
-  private void detect(String number_agent){
-    String backend_url=preferences.getString("backend_url","");
+  private void detect(String number_agent) throws JSONException {
+    String backend_url=preferences.getString("backend_call_valid","");
     String my_number = preferences.getString("my_number","");
 
     mRequestQueue = Volley.newRequestQueue(getApplicationContext());
-    JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, backend_url, null, new Response.Listener<JSONObject>() {
+
+
+
+    mRequestQueue.getCache().clear();
+    StringRequest request = new StringRequest(Request.Method.GET, backend_url+"?agente="+number_agent, new Response.Listener<String>() {
       @Override
-      public void onResponse(JSONObject response) {
+      public void onResponse(String res) {
+        JSONObject response= null;
+        try {
+          response = new JSONObject(res);
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+
         Log.i("UFO: Call screening","Response :" + response.toString());
         try {
-          boolean valid = response.getBoolean("valid");
-          if(valid) {
+          int valid = response.getInt("valid");
+          Log.e("UFO:","Valid "+valid);
+
+          if(valid==1) {
             String bussines = response.getString("bussines");
             String subject = response.getString("subject");
 
@@ -68,6 +81,7 @@ public class Servicio extends CallScreeningService {
 
            //notifyCall(getId(number_agent), bussines, subject);
           }else{
+            llamada.agenteNoDetectado();
             clearNotification(getId(number_agent));
             Log.e("UFO:","Number "+number_agent+" not valid");
           }
@@ -83,23 +97,27 @@ public class Servicio extends CallScreeningService {
         Log.d("UFO: Call screeing",error.toString());
         clearNotification(getId(number_agent));
       }
-    }){
+    }) {
+
       @Override
-      public Map<String,String> getHeaders(){
+      protected  Map<String, String> getParams(){
+        Log.d("UFO:","Enviar parametros");
+        Map<String, String> params = new HashMap();
+        params.put("user",my_number);
+        params.put("agente",number_agent);
+        return params;
+      }
+
+      @Override
+      public Map<String, String> getHeaders() {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String backend_auth=preferences.getString("backend_auth","");
-        if(backend_auth.equals("")==false){
-          headers.put("Authorization","Bearer "+backend_auth);
+        String backend_auth = preferences.getString("backend_auth", "");
+        if (backend_auth.equals("") == false) {
+          headers.put("Authorization", "Bearer " + backend_auth);
         }
         return headers;
       }
-      @Override
-      public Map<String,String> getParams(){
-        Map<String,String> params=new HashMap<String,String>();
-        params.put("number_user",my_number);
-        params.put("number_agent",number_agent);
-        return  params;
-      }
+
     };
 
     mRequestQueue.add(request);
@@ -183,7 +201,7 @@ public class Servicio extends CallScreeningService {
 
         int resId = getApplicationContext().getResources().getIdentifier("sound", "raw", getPackageName());
         final MediaPlayer mp=MediaPlayer.create(getApplicationContext(),resId);
-        mp.start();
+        //mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
           @Override
           public void onCompletion(MediaPlayer mediaPlayer) {

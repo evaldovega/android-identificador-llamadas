@@ -108,6 +108,13 @@ public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJ
     promise.resolve("Backend Auth almacenada correctamente");
   }
 
+  @ReactMethod
+  public void setPreference(String key,String value,Promise promise){
+    editor.putString(key,value);
+    editor.apply();
+    promise.resolve("Preference almacenada correctamente");
+  }
+
   // Example method
   // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod

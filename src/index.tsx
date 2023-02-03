@@ -57,3 +57,7 @@ export function setBackendAuth(token:String){
 export function init(){
   return UfotectAndroidIdentificadorLlamadas.init();
 }
+
+export function setPreference(key:string,value:string){
+  return UfotectAndroidIdentificadorLlamadas.setPreference(key,value);
+}
