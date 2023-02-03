@@ -136,7 +136,7 @@ public class Llamada  {
                 public Map<String,String> getHeaders(){
                     HashMap<String, String> headers = new HashMap<String, String>();
                     String backend_auth=preferences.getString("backend_auth","");
-                    if(backend_auth.equals("")==false){
+                    if(!backend_auth.equals("")){
                         headers.put("Authorization","Bearer "+backend_auth);
                     }
                     return headers;
@@ -155,7 +155,9 @@ public class Llamada  {
     }
 
     public int getNotificacionId(){
-        return  Integer.parseInt(this.agente.substring(this.agente.length()-4));
+        int id = Integer.parseInt(agente.substring(agente.length()-4));
+        Log.d("UFO:","Notificacion id "+id+" Agente "+agente);
+        return  id;
     }
 
     public void rechazar(){
