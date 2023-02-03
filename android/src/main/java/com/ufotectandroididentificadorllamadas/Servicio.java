@@ -210,21 +210,21 @@ public class Servicio extends CallScreeningService {
         });
 
         number=details.getHandle().toString().replace("tel:","");
+        llamada.setAgente(number);
 
         try{
           powerOn();
-          llamada.setAgente(number);
           llamada.notificarLlamada();
           detect(number);
           CallResponse.Builder response = new CallResponse.Builder();
 
-          final Handler handler = new Handler();
+          /*final Handler handler = new Handler();
           handler.postDelayed(new Runnable() {
             @Override
             public void run() {
              mp.release();
             }
-          }, 7000);
+          }, 7000);*/
 
           final Handler handler2 = new Handler();
           handler2.postDelayed(new Runnable() {
@@ -235,12 +235,9 @@ public class Servicio extends CallScreeningService {
           }, 4000);
 
 
-
-
-
         }catch (Exception e){
           Log.e("UFO:",e.getMessage());
-          mp.release();
+          //mp.release();
         }
       }
     }else{

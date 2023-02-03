@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -104,6 +106,7 @@ public class Llamada  {
         Log.d("UFO: ","Asunto  "+this.asunto);
 
         String backend_call_store=preferences.getString("backend_call_store","");
+        cerrarNotificacion();
 
         if(!backend_call_store.equals("")){
 
@@ -146,13 +149,13 @@ public class Llamada  {
             mRequestQueue.add(request);
         }
 
-        cerrarNotificacion();
+
         setAgente("");
         setAsunto("");
     }
 
     public int getNotificacionId(){
-        return  Integer.parseInt(this.agente.substring(this.agente.length()-4,this.agente.length()));
+        return  Integer.parseInt(this.agente.substring(this.agente.length()-4));
     }
 
     public void rechazar(){
@@ -177,12 +180,15 @@ public class Llamada  {
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this.ctx, 0,
                 fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Bitmap largeIcon = BitmapFactory.decodeResource(this.ctx.getResources(), R.drawable.trulii);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.ctx, channel_id)
                 .setSmallIcon(R.drawable.icon)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setContentTitle(title)
                 .setContentText(subject)
                 .setVibrate(new long[]{0, 500, 1000})
+                .setLargeIcon(largeIcon)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(subject).setBigContentTitle(title))
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
