@@ -46,6 +46,7 @@ public class Servicio extends CallScreeningService {
   String number="";
   String channel_id="UFOTECH";
   static int importance = NotificationManager.IMPORTANCE_MAX;
+  static Llamada llamada;
   SharedPreferences preferences;
 
   private void detect(String number_agent){
@@ -62,7 +63,10 @@ public class Servicio extends CallScreeningService {
           if(valid) {
             String bussines = response.getString("bussines");
             String subject = response.getString("subject");
-            notifyCall(getId(number_agent), bussines, subject);
+
+            llamada.agenteDetectado(number_agent,bussines,subject);
+
+           //notifyCall(getId(number_agent), bussines, subject);
           }else{
             clearNotification(getId(number_agent));
             Log.e("UFO:","Number "+number_agent+" not valid");
@@ -141,7 +145,6 @@ public class Servicio extends CallScreeningService {
     PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
       fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
       .setSmallIcon(R.drawable.icon)
       .setCategory(NotificationCompat.CATEGORY_CALL)
@@ -176,6 +179,8 @@ public class Servicio extends CallScreeningService {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       if(details.getCallDirection()==Call.Details.DIRECTION_INCOMING){
         Log.d("UFO:","Incoming call "+getPackageName());
+        llamada = Llamada.getInstance(getApplicationContext());
+
         int resId = getApplicationContext().getResources().getIdentifier("sound", "raw", getPackageName());
         final MediaPlayer mp=MediaPlayer.create(getApplicationContext(),resId);
         mp.start();
@@ -187,32 +192,37 @@ public class Servicio extends CallScreeningService {
         });
 
         number=details.getHandle().toString().replace("tel:","");
-        Log.d("UFO: Caller ",number);
 
         try{
           powerOn();
-          notifyCall(getId(number),"Consultando empresa","...");
+          llamada.setAgente(number);
+          llamada.notificarLlamada();
           detect(number);
           CallResponse.Builder response = new CallResponse.Builder();
-          //respondToCall(details,response.setSilenceCall(true).build());
-          final Handler handler = new Handler();
 
+          final Handler handler = new Handler();
           handler.postDelayed(new Runnable() {
             @Override
             public void run() {
              mp.release();
             }
-          }, 8000);
+          }, 7000);
 
-          /*final Handler handler2 = new Handler();
+          final Handler handler2 = new Handler();
           handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-              clearNotification(getId(number));
+              respondToCall(details,response.setSilenceCall(true).build());
             }
-          }, 60000);*/
+          }, 4000);
+
+
+
+
+
         }catch (Exception e){
           Log.e("UFO:",e.getMessage());
+          mp.release();
         }
       }
     }else{
