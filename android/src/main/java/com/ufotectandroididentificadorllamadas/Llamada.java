@@ -180,7 +180,7 @@ public class Llamada  {
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this.ctx, 0,
                 fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(this.ctx.getResources(), R.drawable.trulii);
+        Bitmap largeIcon = BitmapFactory.decodeResource(this.ctx.getResources(), R.drawable.trulli);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.ctx, channel_id)
                 .setSmallIcon(R.drawable.icon)
