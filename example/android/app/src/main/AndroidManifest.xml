@@ -1,10 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ufotectandroididentificadorllamadasexample">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ufotectandroididentificadorllamadasexample">
 
     <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
-  <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
+      tools:ignore="ProtectedPermissions" />
+  <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+      tools:ignore="ProtectedPermissions" />
   
   <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
   <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
