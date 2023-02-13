@@ -52,11 +52,7 @@ public class Servicio extends CallScreeningService {
   private void detect(String number_agent) throws JSONException {
     String backend_url=preferences.getString("backend_call_valid","");
     String my_number = preferences.getString("my_number","");
-
     mRequestQueue = Volley.newRequestQueue(getApplicationContext());
-
-
-
     mRequestQueue.getCache().clear();
     StringRequest request = new StringRequest(Request.Method.GET, backend_url+"?agente="+number_agent, new Response.Listener<String>() {
       @Override
@@ -198,8 +194,9 @@ public class Servicio extends CallScreeningService {
       if(details.getCallDirection()==Call.Details.DIRECTION_INCOMING){
         Log.d("UFO:","Incoming call "+getPackageName());
         llamada = Llamada.getInstance(getApplicationContext());
+        llamada.setCtx(getApplicationContext());
 
-        int resId = getApplicationContext().getResources().getIdentifier("sound", "raw", getPackageName());
+        /*int resId = getApplicationContext().getResources().getIdentifier("sound", "raw", getPackageName());
         final MediaPlayer mp=MediaPlayer.create(getApplicationContext(),resId);
         //mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -207,7 +204,7 @@ public class Servicio extends CallScreeningService {
           public void onCompletion(MediaPlayer mediaPlayer) {
             mp.start();
           }
-        });
+        });*/
 
         number=details.getHandle().toString().replace("tel:","");
         llamada.setAgente(number);
@@ -216,6 +213,7 @@ public class Servicio extends CallScreeningService {
           powerOn();
           llamada.notificarLlamada();
           detect(number);
+
           CallResponse.Builder response = new CallResponse.Builder();
 
           /*final Handler handler = new Handler();
@@ -225,18 +223,12 @@ public class Servicio extends CallScreeningService {
              mp.release();
             }
           }, 7000);*/
+          respondToCall(details,response.setSilenceCall(true).build());
 
-          final Handler handler2 = new Handler();
-          handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              respondToCall(details,response.setSilenceCall(true).build());
-            }
-          }, 4000);
 
 
         }catch (Exception e){
-          Log.e("UFO:",e.getMessage());
+          Log.e("UFO:CALL",e.getMessage());
           //mp.release();
         }
       }

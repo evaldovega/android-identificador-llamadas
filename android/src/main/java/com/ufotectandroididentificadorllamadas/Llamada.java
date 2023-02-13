@@ -74,14 +74,20 @@ public class Llamada  {
 
     public void setCtx(Context ctx){
         this.ctx = ctx;
+
     }
 
     private void hablar(){
-        String parrafo="";
-        for(int i=0;i<2;i++){
-            parrafo=parrafo+this.repetir+".";
+        try {
+            Log.d("UFO:tts","Hablando");
+            String parrafo = "";
+            for (int i = 0; i < 2; i++) {
+                parrafo = parrafo + this.repetir + ".";
+            }
+            this.tts.speak(parrafo, TextToSpeech.QUEUE_FLUSH, null);
+        }catch (Exception e){
+            Log.e("UFO:tts",e.getMessage());
         }
-        this.tts.speak(parrafo, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void agenteNoDetectado(){

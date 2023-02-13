@@ -36,7 +36,6 @@ public class Servicio2 extends BroadcastReceiver {
                     llamada=Llamada.getInstance(null);
 
                     if(numero.equals(llamada.agente)) {
-                        llamada.setCtx(context);
                         estado_anterior = state;
                         Log.d("UFO: BroadcastReceiver", "Sonando llamada del agente " + llamada.agente);
                     }

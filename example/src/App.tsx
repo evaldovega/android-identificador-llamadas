@@ -23,9 +23,11 @@ export default function App() {
 
   React.useEffect(() => {
     init()
+    const SERVER_URL="https://truliapp.co/"
     //setBackendUrl('http://192.168.1.57:3000/validate')
-    setPreference('backend_call_valid','http://192.168.1.25:8000/entidades/historial-llamadas/informacion-llamada/')
-    setPreference('backend_call_store','http://192.168.1.25:8000/entidades/historial-llamadas/registro-llamada/')
+    setPreference('backend_call_valid',SERVER_URL+'entidades/historial-llamadas/informacion-llamada/')
+    setPreference('backend_call_store',SERVER_URL+'entidades/historial-llamadas/registro-llamada/')
+    
     getBackendUrl().then((url:String)=>{
       console.log(url);
     })
