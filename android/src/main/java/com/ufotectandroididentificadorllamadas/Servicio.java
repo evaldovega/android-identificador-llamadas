@@ -134,47 +134,6 @@ public class Servicio extends CallScreeningService {
     }
   }
 
-  private void createNotificationChannel(){
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationManager notificationManager = getSystemService(NotificationManager.class);
-      notificationManager.deleteNotificationChannel(channel_id);
-
-      AudioAttributes audioAttributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
-
-      NotificationChannel channel = new NotificationChannel(channel_id, channel_id, NotificationManager.IMPORTANCE_HIGH);
-      channel.enableLights(true);
-      channel.enableVibration(true);
-      channel.setDescription("Envia notificaciónes para notificar al usuario de llamadas entrantes");
-      channel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+"://com.ufotectandroididentificadorllamadas/"+R.raw.truli),audioAttributes);
-
-      notificationManager.createNotificationChannel(channel);
-      Log.d("UFO:","Channel created");
-    }
-  }
-
-  private void notifyCall(int id,String bussines,String subject){
-    Log.d("UFO:","Notify call");
-    Intent fullScreenIntent = new Intent(Intent.ACTION_MAIN);
-    fullScreenIntent.setComponent(new ComponentName(getApplicationContext().getPackageName(), getApplicationContext().getPackageName()+".MainActivity"));
-    PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-      fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
-      .setSmallIcon(R.drawable.icon)
-      .setCategory(NotificationCompat.CATEGORY_CALL)
-      .setContentTitle(bussines)
-      .setContentText("Te llamaré pronto.")
-      .setVibrate(new long[]{0, 500, 1000})
-      .setStyle(new NotificationCompat.BigTextStyle().bigText(subject).setBigContentTitle("mas información"))
-      .setOngoing(true)
-      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-      .setPriority(NotificationCompat.PRIORITY_MAX)
-      .setAutoCancel(true)
-      .setFullScreenIntent(fullScreenPendingIntent, true);
-
-    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-    notificationManager.notify(id, builder.build());
-  }
 
   private int getId(String number){
     return  Integer.parseInt(number.substring(number.length()-4,number.length()));

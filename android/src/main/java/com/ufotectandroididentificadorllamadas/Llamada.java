@@ -186,7 +186,7 @@ public class Llamada  {
         Intent fullScreenIntent = new Intent(Intent.ACTION_MAIN);
         fullScreenIntent.setComponent(new ComponentName(this.ctx.getPackageName(), this.ctx.getPackageName()+".MainActivity"));
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this.ctx, 0,
-                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Bitmap largeIcon = BitmapFactory.decodeResource(this.ctx.getResources(), R.drawable.trulli);
 
