@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import com.facebook.common.references.SharedReference;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -28,15 +29,37 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 
 @ReactModule(name = UfotectAndroidIdentificadorLlamadasModule.NAME)
-public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJavaModule {
   public static final String NAME = "UfotectAndroidIdentificadorLlamadas";
   private Promise permiso;
   private SharedPreferences preferences;
   private SharedPreferences.Editor editor;
   String channel_id="UFOTECH";
 
+  private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
+      Log.d("UFO:","onActivityResult "+requestCode);
+      if(requestCode==1){
+        Log.d("UFO:","onActivityResult");
+        if(resultCode == Activity.RESULT_OK){
+          if(permiso!=null) {
+            Log.d("UFO:","concedido");
+            permiso.resolve("ok");
+          }
+        }else{
+          Log.d("UFO:","no concedido");
+          permiso.reject("E_REJECT_TO_ROLE_MANAGER");
+        }
+      }
+
+      permiso=null;
+    };
+  };
+
   public UfotectAndroidIdentificadorLlamadasModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    reactContext.addActivityEventListener(mActivityEventListener);
     preferences = reactContext.getSharedPreferences("UFOCALL", Context.MODE_PRIVATE);
     editor = preferences.edit();
   }
@@ -137,46 +160,26 @@ public class UfotectAndroidIdentificadorLlamadasModule extends ReactContextBaseJ
 
   @ReactMethod
   public void defaultCallScreening(Promise promise){
+    this.permiso=promise;
+
     try{
 
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-        permiso=promise;
+
         Intent intent = null;
         RoleManager roleManager = (RoleManager) getReactApplicationContext().getSystemService(RoleManager.class);
         intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING);
         getCurrentActivity().startActivityForResult(intent,1);
       }else{
-        permiso.reject("Su dispositivo no soporta esta funcionalidad");
-        permiso=null;
+
+        this.permiso.reject("Su dispositivo no soporta esta funcionalidad");
+        this.permiso=null;
       }
 
     }catch (Exception e){
       Log.e("UFO:CALL Screening",e.getMessage());
-      permiso.reject(e.getMessage());
-      permiso=null;
+      this.permiso.reject(e.getMessage());
+      this.permiso=null;
     }
-  }
-
-  @Override
-  public void onActivityResult(Activity activity, int i, int i1, @Nullable Intent intent) {
-    if(i==1){
-      Log.d("UFO:","onActivityResult");
-      if(i1 == Activity.RESULT_OK){
-        if(permiso!=null) {
-          Log.d("UFO:","concedido");
-          permiso.resolve("ok");
-        }
-      }else{
-        Log.d("UFO:","no concedido");
-        permiso.reject("E_REJECT_TO_ROLE_MANAGER");
-      }
-    }
-
-    permiso=null;
-  }
-
-  @Override
-  public void onNewIntent(Intent intent) {
-
   }
 }
